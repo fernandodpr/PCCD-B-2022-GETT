@@ -25,6 +25,23 @@ int main(){
     //Creo la estructura sigaction y defino el signal handler.
         struct sigaction sigaction_parametro;
         sigaction_parametro.sa_handler = handler;
+        /*
+        SA_RESTART
+                Provide behavior compatible with BSD signal semantics by
+                making certain system calls restartable across signals.
+                This flag is meaningful only when establishing a signal
+                handler.  See signal(7) for a discussion of system call
+                restarting.
+        */
+        /* 
+        SA_RESETHAND
+            Restore the signal action to the default upon entry to the
+            signal handler.  This flag is meaningful only when
+            establishing a signal handler.
+        Restablece la señal a su default después de la primera ejecución
+        
+        */
+        sigaction_parametro.sa_flags = SA_RESETHAND; 
     // Ahora utilizando la función sigcation tengo que definir a cada señal los parámetros sigaction_parametro 
 
         //Cuantas señales hay? Creo que hay 31 y después hay otras 32 más de tiempo real??
@@ -45,13 +62,14 @@ int main(){
         }
 
 
-        printf("Se han recibido %d señales SIGUSR1", usr1);
-        printf("Se han recibido %d señales SIGUSR2", usr2);
+        printf("Se han recibido %d señales SIGUSR1\n", usr1);
+        printf("Se han recibido %d señales SIGUSR2\n", usr2);
 }
 
 
 void handler(int signal) {
-    switch(signal) {
+    printf("Recibida: %d      ",signal);
+    switch(signal ) {
         case 10: //SIGUSR1
             printf("Signal SIGUSR1\n");
             usr1++;
