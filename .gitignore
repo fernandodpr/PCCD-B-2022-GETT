@@ -1,0 +1,97 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Codespaces
+Marketplace
+Explore
+ 
+@fernandodpr 
+github
+/
+gitignore
+Public
+Fork your own copy of github/gitignore
+Code
+Pull requests
+374
+Actions
+Security
+Insights
+gitignore/C.gitignore
+@chaosdefinition
+chaosdefinition Update C.gitignore
+…
+Latest commit f76d089 on Oct 31, 2016
+ History
+ 8 contributors
+@rye@Leandros@snisarg@dybekm@eugpermar@dashed@starrify@chaosdefinition
+52 lines (44 sloc)  430 Bytes
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+Footer
+© 2023 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+gitignore/C.gitignore at main · github/gitignore
