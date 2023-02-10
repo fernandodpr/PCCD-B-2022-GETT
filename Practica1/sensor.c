@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 void handler(int signal);
+void mask_signal(int signal);
+void unmask_signal(int signal);
 
 int salir = 0;
 int estado = 1;
@@ -58,15 +60,29 @@ void handler(int signal) {
     switch(signal ) {
         case 10: //SIGUSR1 Subiendo a tu piso
             printf("Esperando ascensor... \n");
+            mask_signal(SIGUSR1);
             esperando =1;
         break;
         case 14: //SIGALRM alarm(segundos)
             printf("Estado sensor:    ON \n");
             kill(pid_ascensor, SIGALRM);
+            unmask_signal(SIGUSR1);
         break;
         break;
         default: 
         break;
     }
 
+}
+void mask_signal(int signal) {
+  sigset_t set;
+  sigemptyset(&set);
+  sigaddset(&set, signal);
+  sigprocmask(SIG_BLOCK, &set, NULL);
+}
+void unmask_signal(int signal) {
+  sigset_t set;
+  sigemptyset(&set);
+  sigaddset(&set, signal);
+  sigprocmask(SIG_UNBLOCK, &set, NULL);
 }

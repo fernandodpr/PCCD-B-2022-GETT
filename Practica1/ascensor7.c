@@ -4,6 +4,11 @@
 #include <stdlib.h>
 
 void handler(int signal);
+void handler_sigusr1(int signal);
+void handler_sigusr2(int signal);
+void handler_sigalarm(int signal);
+void mask_signal(int signal);
+void unmask_signal(int signal);
 
 int salir = 0;
 int estado = 1;
@@ -33,9 +38,14 @@ int main(int argc ,char *argv[]) {
     signalstruct.sa_handler = handler;
 
     sigaction(2, &signalstruct, NULL); //ctrl+C
-    sigaction(3, &signalstruct, NULL); //SIGQUIT
-    sigaction(10, &signalstruct, NULL); //SIGUSR1
-    sigaction(12, &signalstruct, NULL); //SIGUSR2
+    sigaction(SIGQUIT, &signalstruct, NULL); //SIGQUIT
+
+
+    signalstruct.sa_handler = handler_sigusr1;
+        sigaction(SIGUSR1, &signalstruct, NULL); //SIGUSR1
+    signalstruct.sa_handler = handler_sigusr2;
+        sigaction(SIGUSR2, &signalstruct, NULL); //SIGUSR2
+    signalstruct.sa_handler = handler_sigalarm;
     sigaction(SIGALRM, &signalstruct, NULL); //SIGALRM
 
     bajando = 0;
@@ -93,22 +103,9 @@ int main(int argc ,char *argv[]) {
 void handler(int signal) {
     printf("Recibida: %d      ",signal);
     switch(signal ) {
-        case 10: //SIGUSR1 SUBIR
-            printf("Signal SIGUSR1 (Orden de subir).\n");
-            subiendo=1;
-        break;
-        case 12: //SIGUSR2
-            printf("Signal SIGUSR1 (Orden de bajar).\n");
-            bajando=1;
-        break;
         case 3: //SIGQUIT
             printf("SIGTERM, saliendo del programa\n");
             salir = 1;
-        break;
-        case 14: //SIGALRM alarm(segundos)
-            printf("Completado, piso actual:  %d\n", estado);
-            bajando=0;
-            subiendo=0;
         break;
         case 2:
             printf("Signal 2, ctrl+c. Saliendo del programa\n");
@@ -119,3 +116,37 @@ void handler(int signal) {
     }
 
 }
+
+void handler_sigusr1(int signal){
+    printf("Signal SIGUSR1 (Orden de subir).\n");
+    mask_signal(SIGUSR1); // Bloquea la señal SIGUSR1
+    mask_signal(SIGUSR2); // Bloquea la señal SIGUSR2
+    subiendo=1;
+}
+void handler_sigusr2(int signal){
+    printf("Signal SIGUSR1 (Orden de bajar).\n");
+    mask_signal(SIGUSR1); // Bloquea la señal SIGUSR1
+    mask_signal(SIGUSR2); // Bloquea la señal SIGUSR2
+    bajando=1;
+}
+void handler_sigalarm(int signal){
+    printf("Completado, piso actual:  %d\n", estado);
+    unmask_signal(SIGUSR1); // Desbloquea la señal SIGUSR1
+    unmask_signal(SIGUSR2); // Desbloquea la señal SIGUSR2
+}
+
+
+
+void mask_signal(int signal) {
+  sigset_t set;
+  sigemptyset(&set);
+  sigaddset(&set, signal);
+  sigprocmask(SIG_BLOCK, &set, NULL);
+}
+void unmask_signal(int signal) {
+  sigset_t set;
+  sigemptyset(&set);
+  sigaddset(&set, signal);
+  sigprocmask(SIG_UNBLOCK, &set, NULL);
+}
+
