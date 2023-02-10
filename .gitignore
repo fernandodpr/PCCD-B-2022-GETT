@@ -28,6 +28,8 @@ Latest commit f76d089 on Oct 31, 2016
 @rye@Leandros@snisarg@dybekm@eugpermar@dashed@starrify@chaosdefinition
 52 lines (44 sloc)  430 Bytes
 
+*.code-workspace
+
 # Prerequisites
 *.d
 
