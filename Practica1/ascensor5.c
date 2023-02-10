@@ -30,7 +30,7 @@ int main(int argc ,char *argv[]) {
     struct sigaction signalstruct;
     signalstruct.sa_handler = handler;
 
-    sigaction(2, &signalstruct, NULL); //ctrl+C
+    sigaction(2, &signalstruct, NULL); //ctrl+C //Esto no es obligatorio en la práctica pero me facilita el matar el proceso
     sigaction(3, &signalstruct, NULL); //SIGQUIT
     sigaction(10, &signalstruct, NULL); //SIGUSR1
     sigaction(12, &signalstruct, NULL); //SIGUSR2
@@ -50,9 +50,7 @@ int main(int argc ,char *argv[]) {
 
                 //Subiendo
                 printf("Subiendo...");
-                sleep(T_PISO);
-                printf("Pisoactual:  %d\n", estado);
-
+                alert(T_PISO);
             }else{
                 printf("Orden incorrecta, ya estás en el piso superior.\n");
             } 
@@ -66,8 +64,7 @@ int main(int argc ,char *argv[]) {
                 cantidadbajar++;
                 estado--;
                 printf(" Bajando...");
-                sleep(T_PISO);
-                printf("Pisoactual:  %d\n", estado);
+                alert(T_PISO);
 
             }else{
                 printf("Orden incorrecta, el ascensor se encuentra en el piso más bajo. \n");
@@ -103,7 +100,11 @@ void handler(int signal) {
             printf("Signal 2, ctrl+c. Saliendo del programa\n");
             salir = 1;
         break;
-
+        case 14: //SIGALRM alarm(segundos)
+            printf("Completado, piso actual:  %d\n", estado);
+            bajando=0;
+            subiendo=0;
+        break;
         default: 
         break;
     }
