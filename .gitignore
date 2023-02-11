@@ -27,7 +27,7 @@ Latest commit f76d089 on Oct 31, 2016
  8 contributors
 @rye@Leandros@snisarg@dybekm@eugpermar@dashed@starrify@chaosdefinition
 52 lines (44 sloc)  430 Bytes
-
+/.vscode/*
 *.code-workspace
 
 # Prerequisites
