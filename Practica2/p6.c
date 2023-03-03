@@ -10,7 +10,7 @@ int acaba = 0;
 
 int main() {
 
-    printf("De Gea ");
+    printf("De Gea \n");
     if(fork() == 0) {
 
         execl("p6hijo", "Ramos ", (char*) 0);
