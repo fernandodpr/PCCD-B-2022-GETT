@@ -20,24 +20,24 @@ void *escribir(void *arg){
 	struct paramStruct *parametros = arg;
 	int num = parametros->num;
 	bool *escribe;
-	bool inercia = false;
+	bool iteracion = false;
 	while(bucle){
 		escribe = parametros->tru;
-		if(inercia && *escribe) printf("[Escritor %d]Escribiendo...\n", num);
+		if(iteracion && *escribe) printf("[Escritor %d]Escribiendo...\n", num);
 		else if(*escribe){
 			printf("[Escritor %d]Intentando escribir...\n", num);
 			papel++;
 			sem_wait(&semGen);
 			sem_wait(&semEsc);
 			printf("[Escritor %d]Escribiendo...\n", num);
-			inercia = true;
+			iteracion = true;
 		}
-		else if(inercia){
+		else if(iteracion){
 			sem_post(&semEsc);
 			papel--;
 			sem_post(&semGen);
 			printf("[Escritor %d]Fin escritura\n", num);
-			inercia = false;
+			iteracion = false;
 		}
 		else printf("[Escritor %d]Esperando a intentar escribir...\n", num);
 		sleep(2);
@@ -48,10 +48,10 @@ void *leer(void *arg){
 	struct paramStruct *parametros = arg;
 	int num = parametros->num;
 	bool *lee;
-	bool inercia = false;
+	bool iteracion = false;
 	while(bucle){
 		lee = parametros->tru;
-		if(inercia && *lee) printf("[Lector %d]Leyendo...\n", num);
+		if(iteracion && *lee) printf("[Lector %d]Leyendo...\n", num);
 		else if(*lee){
 			printf("[Lector %d]Intentando leer...\n", num);
 			while(papel != 0){
@@ -60,12 +60,12 @@ void *leer(void *arg){
 			}
 			sem_wait(&semLec);
 			printf("[Lector %d]Leyendo...\n", num);
-			inercia = true;
+			iteracion = true;
 		}
-		else if(inercia){
+		else if(iteracion){
 			sem_post(&semLec);
 			printf("[Lector %d]Fin lectura\n", num);
-			inercia = false;
+			iteracion = false;
 		}
 		else printf("[Lector %d]Esperando a intentar leer...\n", num);
 		sleep(2);
