@@ -31,3 +31,7 @@ int main() {
     // El programa termina
     return 0;
 }
+/*Escriba un proceso p2 que cree tantos threads como parámetros reciba en la línea de comandos. Cada 
+thread deberá imprimir en pantalla la posición y la cadena de texto del parámetro correspondiente. 
+Todos los threads deberán ejecutar la misma función, que recibirá como argumentos la posición y la 
+cadena a imprimir.*/

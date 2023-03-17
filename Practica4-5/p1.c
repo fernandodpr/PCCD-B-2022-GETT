@@ -1,22 +1,27 @@
 #include <stdio.h>
 #include <pthread.h>
+#include <stdbool.h>
 #include <unistd.h> // para sleep
 
+bool salir = true;
+int cont = 0;
 void *teclado(void *arg) {
-    int c;
-    while ((c = getchar()) != 'q') {}
-    return NULL;
+    char leer;
+    do{
+        scanf("%c", &leer);
+        if(leer == 'q') salir = false;
+        cont++;
+    }while(salir);
 }
 
 int main() {
     pthread_t thread;
     pthread_create(&thread, NULL, teclado, NULL);
-    int num_caracteres = 0;
-    while (1) {
-        printf("Numero de caracteres leidos del teclado: %d\n", num_caracteres);
-        fflush(stdout);
-        num_caracteres++;
+    do{
+        printf("Caracteres pulsados: %d\n", cont);
         sleep(1);
-    }
-    return 0;
+    }while(salir);
 }
+
+
+/**/
