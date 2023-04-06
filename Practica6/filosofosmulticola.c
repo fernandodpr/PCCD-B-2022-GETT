@@ -108,7 +108,6 @@ void *filosofo_thread (int *id_filosofo) {
         printf("Filósofo [%d]: tengo todos los tenedores entonces puedo comer...\n", *id_filosofo);
         sleep(10);
         //Despues de comer hay que dejar los tenedores
-        
 
         // Deja el primer tenedor (izquierdo)
         struct message dejar_tenedor1;

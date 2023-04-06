@@ -12,7 +12,7 @@ void *fumador1(), *fumador2(), *fumador3(), *proveedor();
 struct mensaje {
     long mstype;
     char mstxt[0];
-
+ 
 };
 
 int main() {

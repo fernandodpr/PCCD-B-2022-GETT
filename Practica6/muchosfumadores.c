@@ -33,8 +33,16 @@ int main() {
 
     //Creamos los hilos
     pthread_t fumador1th, fumador2th, fumador3th, proveedorth;
+    int vuelta =1;
+    if((pthread_create(&fumador1th, NULL, fumador1, &vuelta) != 0)||(pthread_create(&fumador2th, NULL, fumador2, &vuelta) != 0)||(pthread_create(&fumador3th, NULL, fumador3, &vuelta) != 0)||(pthread_create(&proveedorth, NULL, proveedor_th, NULL) != 0)) {
+        printf("Problema al crear filósofos.\n");
+        return 0;
+    }
 
-    if((pthread_create(&fumador1th, NULL, fumador1, NULL) != 0)||(pthread_create(&fumador2th, NULL, fumador2, NULL) != 0)||(pthread_create(&fumador3th, NULL, fumador3, NULL) != 0)||(pthread_create(&proveedorth, NULL, proveedor_th, NULL) != 0)) {
+    //Creamos los hilos
+    pthread_t fumador4th, fumador5th, fumador6th;
+    vuelta ++;
+    if((pthread_create(&fumador4th, NULL, fumador1, &vuelta) != 0)||(pthread_create(&fumador5th, NULL, fumador2, &vuelta) != 0)||(pthread_create(&fumador6th, NULL, fumador3, &vuelta) != 0)) {
         printf("Problema al crear filósofos.\n");
         return 0;
     }
@@ -47,25 +55,25 @@ int main() {
 
 
 
-void *fumador1 () {
+void *fumador1 (int *fumador) {
     struct mensaje aviso;
     aviso.type=1;
     while(1) {
         struct mensaje mi_turno;
-        printf("Fumador 1: Tengo papel.\n");
+        printf("Fumador 1 %d: Tengo papel.\n",*fumador);
 
-        printf("Fumador 1: Esperando tabaco...\n");
+        printf("Fumador 1 %d: Esperando tabaco...\n",*fumador);
         msgrcv(cola_tabaco, &mi_turno, sizeof(char[0]), 1, 0);
-        printf("Fumador 1: Tengo tabaco, y lo suelto\n");
+        printf("Fumador 1 %d: Tengo tabaco, y lo suelto\n",*fumador);
         msgsnd(cola_tabaco, &aviso, sizeof(char[0]), 0);
-        printf("Fumador 1: Esperando fosforo...\n");
+        printf("Fumador 1 %d: Esperando fosforo...\n",*fumador);
         msgrcv(cola_fosforo, &mi_turno, sizeof(char[0]), 1, 0);
-        printf("Fumador 1: Tengo fosforo, recupero el tabaco\n");
+        printf("Fumador 1 %d: Tengo fosforo, recupero el tabaco\n",*fumador);
         msgrcv(cola_tabaco, &mi_turno, sizeof(char[0]), 1, 0);
 
-        printf("Fumador 1: Estoy fumando...🚬\n");
+        printf("Fumador 1 %d: Estoy fumando...🚬\n",*fumador);
         sleep(2);
-        printf("Fumador 1: Acabé de fumar.\n");
+        printf("Fumador 1 %d: Acabé de fumar.\n",*fumador);
         struct mensaje continua;
         continua.type = 1;
         msgsnd(proveedor, &continua, sizeof(char[0]), 0);
@@ -73,25 +81,25 @@ void *fumador1 () {
 
 }
 
-void *fumador2 () {
+void *fumador2 (int *fumador) {
     struct mensaje aviso;
     aviso.type=1;
     while(1) {
         struct mensaje mi_turno;
-        printf("Fumador 2: Tengo tabaco.\n");
+        printf("Fumador 2 %d: Tengo tabaco.\n",*fumador);
 
-        printf("Fumador 2: Esperando papel...\n");
+        printf("Fumador 2 %d: Esperando papel...\n",*fumador);
         msgrcv(cola_papel, &mi_turno, sizeof(char[0]), 1, 0);
-        printf("Fumador 2: Tengo papel, y lo suelto\n");
+        printf("Fumador 2 %d: Tengo papel, y lo suelto\n",*fumador);
         msgsnd(cola_papel, &aviso, sizeof(char[0]), 0);
-        printf("Fumador 2: Esperando fosforo...\n");
+        printf("Fumador 2 %d: Esperando fosforo...\n",*fumador);
         msgrcv(cola_fosforo, &mi_turno, sizeof(char[0]), 1, 0);
-        printf("Fumador 2: Tengo fosforo, recupero el papel\n");
+        printf("Fumador 2 %d: Tengo fosforo, recupero el papel\n",*fumador);
         msgrcv(cola_papel, &mi_turno, sizeof(char[0]), 1, 0);
 
-        printf("Fumador 2: Estoy fumando...🚬\n");
+        printf("Fumador 2 %d: Estoy fumando...🚬\n",*fumador);
         sleep(2);
-        printf("Fumador 2: Acabé de fumar.\n");
+        printf("Fumador 2 %d: Acabé de fumar.\n",*fumador);
         struct mensaje continua;
         continua.type = 1;
         msgsnd(proveedor, &continua, sizeof(char[0]), 0);
@@ -99,25 +107,25 @@ void *fumador2 () {
 
 }
 
-void *fumador3() {
+void *fumador3(int *fumador) {
     struct mensaje aviso;
     aviso.type=1;
     while(1) {
         struct mensaje mi_turno;
-        printf("Fumador 3: Tengo fósforo.\n");
+        printf("Fumador 3 %d: Tengo fósforo.\n",*fumador);
 
-        printf("Fumador 3: Esperando papel...\n");
+        printf("Fumador 3 %d: Esperando papel...\n",*fumador);
         msgrcv(cola_papel, &mi_turno, sizeof(char[0]), 1, 0);
-        printf("Fumador 3: Tengo papel, y lo suelto\n");
+        printf("Fumador 3 %d: Tengo papel, y lo suelto\n",*fumador);
         msgsnd(cola_papel, &aviso, sizeof(char[0]), 0);
-        printf("Fumador 3: Esperando tabaco...\n");
+        printf("Fumador 3 %d: Esperando tabaco...\n",*fumador);
         msgrcv(cola_tabaco, &mi_turno, sizeof(char[0]), 1, 0);
-        printf("Fumador 3: Tengo tabaco, recupero el papel\n");
+        printf("Fumador 3 %d: Tengo tabaco, recupero el papel\n",*fumador);
         msgrcv(cola_papel, &mi_turno, sizeof(char[0]), 1, 0);
 
-        printf("Fumador 3: Estoy fumando...🚬\n");
+        printf("Fumador 3 %d: Estoy fumando...🚬\n",*fumador);
         sleep(2);
-        printf("Fumador 3: Acabé de fumar.\n");
+        printf("Fumador 3 %d: Acabé de fumar.\n",*fumador);
         struct mensaje continua;
         continua.type = 1;
         msgsnd(proveedor, &continua, sizeof(char[0]), 0);
